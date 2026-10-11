@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Vit Bank with a local practice wallet, calculator, and feedback form.">
+  <title>Vit Bank | Account</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./script.js"></script>
+</head>
+<body>
+  <main class="page-shell">
+    <section id="auth-screen">
+      <div class="intro">
+        <div class="brand"><img class="brand-mark" src="./vit-seal.svg" alt=""> VIT BANK</div>
+        <h1 id="auth-title">Log in to Vit Bank</h1>
+        <p class="subheading" id="auth-description">Log in or create an account.</p>
+      </div>
+      <div id="auth-message" class="message" role="status" aria-live="polite"></div>
+      <div class="auth-layout">
+        <section class="panel">
+          <div class="panel-header">
+            <h2 id="auth-form-title">Account sign in</h2>
+            <p class="muted is-hidden" id="auth-form-description"></p>
+          </div>
+          <div class="panel-body">
+            <form id="auth-form" class="form-grid">
+              <div class="field">
+                <label for="username">Username</label>
+                <input id="username" name="username" autocomplete="username" minlength="3" maxlength="24"
+                       pattern="[A-Za-z0-9._-]+" required>
+                <p class="help-text">3–24 letters, numbers, dots, underscores, or hyphens.</p>
+              </div>
+              <div class="field">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" autocomplete="current-password" minlength="8" required>
+              </div>
+              <div class="field" id="confirm-password-field">
+                <label for="confirm-password">Confirm password</label>
+                <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" minlength="8" required>
+              </div>
+              <div class="button-row">
+                <button id="auth-submit" class="button" type="submit">Log in</button>
+                <button id="auth-reset" class="button secondary" type="reset">Reset</button>
+              </div>
+            </form>
+            <div class="auth-switch">
+              <button id="auth-toggle" class="button secondary" type="button">Create account</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="bank-app" class="is-hidden">
+      <div class="view-heading">
+        <div>
+          <h1 id="welcome-title">Your account</h1>
+          <p class="subheading">Vit Bank account overview.</p>
+        </div>
+        <div class="account-tools">
+          <span id="account-name" class="account-name"></span>
+          <button id="logout-button" class="button secondary" type="button">Log out</button>
+        </div>
+      </div>
+
+      <nav class="app-nav" aria-label="Vit Bank sections">
+        <button class="nav-button active" type="button" data-view="dashboard-view" aria-current="page">Dashboard</button>
+        <button class="nav-button" type="button" data-view="wallet-view">Wallet</button>
+        <button class="nav-button" type="button" data-view="calculator-view">Calculator</button>
+        <button class="nav-button" type="button" data-view="feedback-view">Feedback</button>
+        <button class="nav-button" type="button" data-view="beneficiaries-view">Beneficiaries</button>
+        <button class="nav-button" type="button" data-view="transfer-view">Transfer</button>
+        <button class="nav-button" type="button" data-view="transactions-view">Transactions</button>
+      </nav>
+
+      <div id="app-message" class="message" role="status" aria-live="polite"></div>
+
+      <section id="dashboard-view" class="view active" aria-labelledby="welcome-title">
+        <div class="dashboard-grid">
+          <article class="panel balance-panel">
+            <div class="panel-body">
+              <p class="balance-label">Practice balance</p>
+              <p id="balance-value" class="balance">₹5,000.00</p>
+              <p class="balance-note">Practice balance only. No real money is involved.</p>
+              <div class="summary-stats">
+                <div class="stat"><p id="beneficiary-count" class="stat-value">0</p><p class="stat-label">Saved beneficiaries</p></div>
+                <div class="stat"><p id="transaction-count" class="stat-value">0</p><p class="stat-label">Wallet activities</p></div>
+              </div>
+            </div>
+          </article>
+          <article class="panel">
+            <div class="panel-body">
+              <h2>Quick actions</h2>
+              <p class="muted">Choose an action.</p>
+              <div class="quick-actions">
+                <button class="quick-action" type="button" data-go="wallet-view"><span>Add money</span><span aria-hidden="true">›</span></button>
+                <button class="quick-action" type="button" data-go="calculator-view"><span>Open calculator</span><span aria-hidden="true">›</span></button>
+                <button class="quick-action" type="button" data-go="feedback-view"><span>Send feedback</span><span aria-hidden="true">›</span></button>
+                <button class="quick-action" type="button" data-go="beneficiaries-view"><span>Add a beneficiary</span><span aria-hidden="true">›</span></button>
+                <button class="quick-action" type="button" data-go="transfer-view"><span>Make a transfer</span><span aria-hidden="true">›</span></button>
+                <button class="quick-action" type="button" data-go="transactions-view"><span>Review transactions</span><span aria-hidden="true">›</span></button>
+              </div>
+            </div>
+          </article>
+        </div>
+        <section class="panel" style="margin-top:18px">
+          <div class="panel-header"><h2>Recent activity</h2><p class="muted">Your latest wallet additions and transfers.</p></div>
+          <div id="recent-transactions"></div>
+        </section>
+      </section>
+
+      <section id="wallet-view" class="view" aria-labelledby="wallet-title">
+        <div class="view-heading">
+          <div><h2 id="wallet-title">Wallet</h2><p class="subheading">Add money to your local practice balance.</p></div>
+        </div>
+        <div class="dashboard-grid wallet-grid">
+          <article class="panel balance-panel">
+            <div class="panel-body">
+              <p class="balance-label">Wallet balance</p>
+              <p id="wallet-balance" class="balance">₹5,000.00</p>
+              <p class="balance-note">Practice funds are stored in this browser.</p>
+            </div>
+          </article>
+          <section class="panel form-panel">
+            <div class="panel-header"><h2>Add money</h2><p class="muted">No payment is processed. The local balance is updated.</p></div>
+            <div class="panel-body">
+              <form id="wallet-form" class="form-grid">
+                <div class="field">
+                  <label for="wallet-amount">Amount (₹)</label>
+                  <input id="wallet-amount" name="amount" type="number" inputmode="decimal"
+                         min="0.01" max="100000" step="0.01" placeholder="0.00" required>
+                  <p class="help-text">Maximum ₹1,00,000 per addition.</p>
+                </div>
+                <div class="field">
+                  <label for="wallet-note">Note (optional)</label>
+                  <input id="wallet-note" name="note" maxlength="80" placeholder="For example, savings">
+                </div>
+                <div class="button-row">
+                  <button class="button" type="submit">Add money</button>
+                  <button class="button secondary" type="reset">Reset</button>
+                </div>
+              </form>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section id="calculator-view" class="view" aria-labelledby="calculator-title">
+        <div class="view-heading">
+          <div><h2 id="calculator-title">Calculator</h2><p class="subheading">Do a basic calculation.</p></div>
+        </div>
+        <section class="panel form-panel">
+          <div class="panel-header"><h2>Calculator</h2><p class="muted">Add, subtract, multiply, or divide.</p></div>
+          <div class="panel-body">
+            <form id="calculator-form" class="form-grid">
+              <div class="calculator-grid">
+                <div class="field">
+                  <label for="calculator-first">First number</label>
+                  <input id="calculator-first" name="first" type="number" step="any" required>
+                </div>
+                <div class="field">
+                  <label for="calculator-operation">Operation</label>
+                  <select id="calculator-operation" name="operation" required>
+                    <option value="add">Add (+)</option>
+                    <option value="subtract">Subtract (−)</option>
+                    <option value="multiply">Multiply (×)</option>
+                    <option value="divide">Divide (÷)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="calculator-second">Second number</label>
+                  <input id="calculator-second" name="second" type="number" step="any" required>
+                </div>
+              </div>
+              <div class="button-row">
+                <button class="button" type="submit">Calculate</button>
+                <button class="button secondary" type="reset">Clear</button>
+              </div>
+            </form>
+            <p id="calculator-result" class="calculator-result" aria-live="polite">Your result will appear here.</p>
+          </div>
+        </section>
+      </section>
+
+      <section id="feedback-view" class="view" aria-labelledby="feedback-title">
+        <div class="view-heading">
+          <div><h2 id="feedback-title">Feedback</h2><p class="subheading">Share your thoughts about Vit Bank.</p></div>
+        </div>
+        <div class="dashboard-grid">
+          <section class="panel form-panel">
+            <div class="panel-header"><h2>Send feedback</h2><p class="muted">Feedback is saved in this browser.</p></div>
+            <div class="panel-body">
+              <form id="feedback-form" class="form-grid">
+                <div class="field">
+                  <label for="feedback-rating">Rating</label>
+                  <select id="feedback-rating" name="rating" required>
+                    <option value="">Choose a rating</option>
+                    <option value="5">5 — Excellent</option>
+                    <option value="4">4 — Good</option>
+                    <option value="3">3 — Okay</option>
+                    <option value="2">2 — Needs work</option>
+                    <option value="1">1 — Poor</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="feedback-topic">Topic</label>
+                  <select id="feedback-topic" name="topic">
+                    <option value="General">General</option>
+                    <option value="Wallet">Wallet</option>
+                    <option value="Calculator">Calculator</option>
+                    <option value="Banking">Banking</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="feedback-message">Your feedback</label>
+                  <textarea id="feedback-message" name="message" rows="4" minlength="5" maxlength="500" required></textarea>
+                  <p class="help-text">Do not include private account details.</p>
+                </div>
+                <div class="button-row">
+                  <button class="button" type="submit">Submit feedback</button>
+                  <button class="button secondary" type="reset">Reset</button>
+                </div>
+              </form>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-header"><h2>Saved feedback</h2><p class="muted">Stored on this device.</p></div>
+            <div id="feedback-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="beneficiaries-view" class="view" aria-labelledby="beneficiaries-title">
+        <div class="view-heading">
+          <div><h2 id="beneficiaries-title">Beneficiaries</h2><p class="subheading">Use fictional names and account numbers only.</p></div>
+        </div>
+        <div class="dashboard-grid">
+          <section class="panel form-panel">
+            <div class="panel-header"><h2>Add a beneficiary</h2><p class="muted">Details are saved locally in this browser.</p></div>
+            <div class="panel-body">
+              <form id="beneficiary-form" class="form-grid">
+                <div class="field">
+                  <label for="beneficiary-name">Beneficiary name</label>
+                  <input id="beneficiary-name" name="name" autocomplete="off" maxlength="60" required>
+                </div>
+                <div class="field">
+                  <label for="beneficiary-bank">Bank name</label>
+                  <input id="beneficiary-bank" name="bank" autocomplete="off" maxlength="60" required>
+                </div>
+                <div class="field">
+                  <label for="beneficiary-ifsc">IFSC code</label>
+                  <input id="beneficiary-ifsc" name="ifsc" autocomplete="off" maxlength="11"
+                         pattern="[A-Za-z]{4}0[A-Za-z0-9]{6}" placeholder="ABCD0123456" required>
+                  <p class="help-text">Format: 4 letters, 0, then 6 letters or numbers. Use fictional details only.</p>
+                </div>
+                <div class="field">
+                  <label for="beneficiary-account">Fictional account number</label>
+                  <input id="beneficiary-account" name="account" inputmode="numeric" autocomplete="off"
+                         pattern="[0-9]{6,18}" minlength="6" maxlength="18" required>
+                  <p class="help-text">Enter 6–18 digits. Never use a real account number.</p>
+                </div>
+                <div class="field">
+                  <label for="beneficiary-account-confirm">Confirm account number</label>
+                  <input id="beneficiary-account-confirm" name="account-confirm" inputmode="numeric"
+                         autocomplete="off" pattern="[0-9]{6,18}" minlength="6" maxlength="18" required>
+                </div>
+                <div class="button-row">
+                  <button class="button" type="submit">Save beneficiary</button>
+                  <button class="button secondary" type="reset">Reset</button>
+                  <button id="cancel-beneficiary" class="button secondary" type="button">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-header"><h2>Saved beneficiaries</h2><p class="muted">Available for simulated transfers.</p></div>
+            <div id="beneficiary-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="transfer-view" class="view" aria-labelledby="transfer-title">
+        <div class="view-heading">
+          <div><h2 id="transfer-title">Transfer</h2><p class="subheading">Practice transfers only. Your balance updates in this browser.</p></div>
+        </div>
+        <div class="panel form-panel">
+          <div class="panel-header"><h2>Transfer details</h2><p class="muted">Choose one of your fictional saved beneficiaries.</p></div>
+          <div class="panel-body">
+            <form id="transfer-form" class="form-grid">
+              <div class="field">
+                <label for="transfer-beneficiary">Beneficiary</label>
+                <select id="transfer-beneficiary" name="beneficiary" required>
+                  <option value="">Select a beneficiary</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="transfer-amount">Amount (₹)</label>
+                <input id="transfer-amount" name="amount" type="number" inputmode="decimal" min="0.01" max="5000"
+                       step="0.01" placeholder="0.00" required>
+                <p id="transfer-limit" class="help-text">Maximum transfer: ₹5,000.00 (available practice balance).</p>
+              </div>
+              <div class="field">
+                <label for="transfer-note">Note (optional)</label>
+                <input id="transfer-note" name="note" maxlength="80" placeholder="For example, class project">
+              </div>
+              <div class="button-row">
+                <button class="button" type="submit">Review transfer</button>
+                <button class="button secondary" type="reset">Reset</button>
+              </div>
+            </form>
+            <div id="transfer-confirmation" class="is-hidden" aria-live="polite">
+              <div class="message visible" role="status"><span class="status pending">Pending</span> <strong>Review this transfer.</strong> Only your local practice balance will change.</div>
+              <div id="transfer-summary" class="search-card"></div>
+              <div class="button-row" style="margin-top:14px">
+                <button id="confirm-transfer" class="button" type="button">Confirm simulated transfer</button>
+                <button id="cancel-transfer" class="button secondary" type="button">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="transactions-view" class="view" aria-labelledby="transactions-title">
+        <div class="view-heading">
+          <div><h2 id="transactions-title">Transactions</h2><p class="subheading">View transfer status or search by reference.</p></div>
+        </div>
+        <section class="panel" style="margin-bottom:18px">
+          <div class="panel-header"><h2>Find an activity by reference</h2><p class="muted">Search by the reference shown after a wallet addition or transfer.</p></div>
+          <div class="panel-body">
+            <form id="reference-form" class="inline-search">
+              <div class="field"><label for="reference-search">Activity reference</label><input id="reference-search" name="reference" autocomplete="off" placeholder="For example, VB-..." required></div>
+              <button class="button" type="submit">Search</button>
+              <button id="clear-search" class="button secondary" type="button">Clear</button>
+            </form>
+            <div id="reference-result" class="search-result" aria-live="polite"></div>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Account activity</h2>
+            <p class="muted">Wallet additions and transfers are stored on this device.</p>
+            <div class="status-legend" aria-label="Possible transaction statuses">
+              <span class="status pending">Pending</span>
+              <span class="status success">Success</span>
+              <span class="status failed">Failed</span>
+            </div>
+          </div>
+          <div id="transaction-list"></div>
+        </section>
+      </section>
+    </section>
+  </main>
+</body>
+</html>

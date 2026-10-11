@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 210" role="img" aria-labelledby="title">
+  <title id="title">Vellore Institute of Technology seal</title>
+  <defs>
+    <path id="top-arc" d="M 22,99 A 78,78 0 0,1 178,99" />
+    <clipPath id="seal-window"><circle cx="100" cy="99" r="59" /></clipPath>
+  </defs>
+  <g fill="none" stroke="#a51e2b">
+    <circle cx="100" cy="99" r="88" stroke-width="6" />
+    <circle cx="100" cy="99" r="78" stroke-width="2" />
+    <circle cx="100" cy="99" r="61" stroke-width="2" />
+  </g>
+  <text fill="#8f1925" font-family="Georgia,serif" font-size="10" font-weight="700" letter-spacing=".6">
+    <textPath href="#top-arc" startOffset="50%" text-anchor="middle">VELLORE INSTITUTE OF TECHNOLOGY</textPath>
+  </text>
+  <text x="100" y="77" fill="#a51e2b" font-family="Georgia,serif" font-size="29" font-weight="700" text-anchor="middle">VIT</text>
+  <g clip-path="url(#seal-window)">
+    <path fill="#a51e2b" d="M37 143V121h16v-7h10V91h14l6-18 8 18h8v-8h8v13h13v-7h6v7h8v-6h8v10h13v43z" />
+    <path fill="#a51e2b" d="M35 129h130v19H35z" />
+    <path fill="#fff" d="M39 122h125v3H39zm0 8h125v2H39zm0 8h125v2H39z" />
+    <path fill="none" stroke="#fff" stroke-width="1.4" d="M45 124v5m10-5v5m10-5v5m10-5v5m10-5v5m10-5v5m10-5v5m10-5v5m10-5v5m10-5v5m10-5v5m10-5v5M50 133v5m10-5v5m10-5v5m10-5v5m10-5v5m10-5v5m10-5v5m10-5v5m10-5v5m10-5v5m10-5v5" />
+    <path fill="#fff" d="M83 93h12v25H83zm-4 27h20v3H79z" />
+    <path fill="#a51e2b" d="M86 97h6v18h-6z" />
+    <path fill="none" stroke="#fff" stroke-width="2" d="M35 118q15-7 30 0t30 0 30 0 35 0" />
+  </g>
+  <path d="M23 163h154l-12 9 12 8H23l12-8z" fill="#fff" stroke="#a51e2b" stroke-width="3" />
+  <path d="M34 173h132" stroke="#a51e2b" stroke-width="2" />
+  <text x="100" y="177" fill="#8f1925" font-family="Georgia,serif" font-size="9" font-weight="700" text-anchor="middle">VIT • EXCELLENCE</text>
+</svg>
